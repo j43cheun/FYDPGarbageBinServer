@@ -10,13 +10,15 @@ var router = express.Router();
  */
 
 var sampleJSON = {
-    'binID':2323452,
+    'binID':232,
     'capacity': 30.4,
     'battery': 75.67,
     'location':{
         'latitude':78.78,
         'longitude':98.98
-    }
+    },
+    'ip':'localhost',
+    'port':3000
 }
  
 var someNum = 65;
@@ -42,6 +44,7 @@ var doPost = function(data) {
         }
         else{
             console.log(body);
+            //console.log(response);
         } 
     });
 };
