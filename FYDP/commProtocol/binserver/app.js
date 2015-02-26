@@ -8,6 +8,8 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var status = require('./routes/status');
+var parser = require('./helpers/serverCommandLineParser');
+var runtimeParms = require('./helpers/runtimeParameters');
 
 var app = express();
 
@@ -65,5 +67,15 @@ app.use(function(err, req, res, next) {
     });
 });
 
+//We get our server parameters.
+//We require a port and a host for ourselves and our lovely central server.
+var serverParms = parser.parse();
+runtimeParms.set(serverParms);
+
+//We register with the server...
+var register = require('./routes/register');
+register.doRegistration(serverParms);
+
+app.listen(serverParms.PORT, serverParms.HOST_NAME);
 
 module.exports = app;

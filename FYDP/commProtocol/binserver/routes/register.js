@@ -1,31 +1,26 @@
 var express = require('express');
+var request = require('request');
 var router = express.Router();
 
-/*
- * There are 2 different routes the main server can hit on a trash can.
- * /lastStatus: Returns the last retrieved status. Theoretically this is an instant call.
- * /updateStatus: This updates the status. Returns a {'status':'working'} json object. Eventually when ready, the trash can will hit the server with a POST request
- *  containing the status.
- */
+var doRegistration = function(runTimeParameters) {
+    var registrationObject = {'binID' : runTimeParameters.BIN_ID, 'ip' : runTimeParameters.HOST_NAME, 'port':runTimeParameters.PORT};
+    var url = "http://" + runTimeParameters.CENTRAL_HOST_NAME + ":" + runTimeParameters.CENTRAL_PORT +  "/GarbageBinServer/GarbageBinRegistrationServlet";
+    request.post(
+    url,
+    { json : registrationObject }, 
+    function (error, response, body) {
+        if (error){
+            console.log("Error registering garbage bin.: ");
+            console.log(error);
+        }
+        else{
+            console.log("Registered Successfully");
+        } 
+    });
+};
 
-/*
- * GET last known status.
- */
-router.get('/laststatus', function(req, res, next) {
-    var sampleObject = 
-    {
-        'Hello': 45,
-        'Nope':67
-    }
-    res.json(sampleObject);
-});
+var register = {
+    'doRegistration' : doRegistration
+};
 
-router.get('/updatestatus', function(req, res, next) {
-    var sampleObject = 
-    {
-        'status':'working'
-    }
-    res.json(sampleObject);
-});
-
-module.exports = router;
+module.exports = register;

@@ -1,6 +1,8 @@
 var express = require('express');
 var request = require('request');
 var router = express.Router();
+var external = require('../helpers/external'); //Our own object for making CMD calls.
+var parms = require('../helpers/runtimeParameters');
 
 /*
  * There are 2 different routes the main server can hit on a trash can to get its status.
@@ -9,42 +11,47 @@ var router = express.Router();
  *  containing the status.
  */
 
-var sampleJSON = {
-    'binID':232,
+// Just a default object to start of with.
+var lastKnownStatus = {
     'capacity': 30.4,
     'battery': 75.67,
     'location':{
         'latitude':78.78,
         'longitude':98.98
     },
-    'ip':'localhost',
-    'port':3000
-}
- 
-var someNum = 65;
-
-var async = function(data, callback){
-    var timeout = Math.ceil(Math.random() * 3000)
-    console.log("Timeout set for: ");
-    console.log(timeout)
-    setTimeout(function() {
-        callback(null, data);
-        }, timeout);
+    'timestamp' : new Date()
 };
 
+// This helper function adds the static part to the JSON being sent
+// that is to say the binID, the ip and the port.
+var formatIdentity = function(dataToSend) {
+    var ourParameters = parms.get();
+    dataToSend.binID = ourParameters.BIN_ID;
+    dataToSend.ip = ourParameters.HOST_NAME;
+    dataToSend.port = ourParameters.PORT;
+    return dataToSend;
+};
+
+// This returns the url to send to.
+// It adds in the methodToCall at the end of it.
+var getURLToSendTo = function(methodToCall) {
+    var nwParameters = parms.get();
+    var url = "http://" + nwParameters.CENTRAL_HOST_NAME + ":" + nwParameters.CENTRAL_PORT +  "/GarbageBinServer/" + methodToCall;
+    return url;
+};
+ 
 var doPost = function(data) {
     request.post(
-    'http://localhost:8080/GarbageBinServer/GarbageBinServlet',
-    { json : sampleJSON }, 
+    getURLToSendTo('GarbageBinServlet'),
+    { json : data }, 
     function (error, response, body) {
-        console.log("Done post");
         if (error){
-            console.log("Error: ");
+            console.log("Error when sending to " + getURLToSendTo('GarbageBinServlet'));
             console.log(error);
         }
         else{
+            console.log("Successfully sent a POST request.");
             console.log(body);
-            //console.log(response);
         } 
     });
 };
@@ -53,19 +60,8 @@ var doPost = function(data) {
  * GET last known status.
  */
 router.get('/laststatus', function(req, res, next) {
-    res.json(sampleJSON);
-});
-
-router.get('/updatestatus', function(req, res, next) {
-    var sampleObject = {
-        'status':'working'
-    };
-    async(1, function(err, data){
-        someNum  = Math.random() * 3000;
-        console.log("someNum set to ");
-        console.log(someNum );
-    });
-    res.json(sampleObject);
+    formatIdentity(lastKnownStatus);
+    res.json(lastKnownStatus);
 });
 
 /*
@@ -73,14 +69,39 @@ router.get('/updatestatus', function(req, res, next) {
  * can tries to update itself. It will then post this status to the server.
  */
 router.post('/updatestatusPost', function(req, res, next) {
-        async(1, function(err, data){
-        sampleJSON.capacity = Math.random() * 100;
-        someNum  = Math.random() * 3000;
-        console.log("someNum set to ");
-        console.log(someNum );
-        doPost(someNum);
+    //This is an async out of process call.
+    external('python testCommandLine.py 1', function(err, stdout, stderr){
+        //This function should take in what stdout prints out and
+        //format it into a valid JavaScript object that can be POSTED
+        //to the central system.
+        if (err)
+        {
+            console.log(err);
+            doPost(formatError(err)); //If we had an error doing the CMD call, we let the server know.
+        }
+        console.log(stdout);
+        parmList = stdout.trim().split(',');
+        //TODO: CHANGE THIS ACCORDING TO JUSTIN'S FORMAT.
+        objectToSend = {
+            'location':{
+                'latitude':parseFloat(parmList[0].trim()),
+                'longitude':parseFloat(parmList[1].trim())
+            },
+            'battery': parseFloat(parmList[2].trim()),
+            'capacity':parseFloat(parmList[3].trim()),
+        }
+        doPost(formatIdentity(objectToSend));
+        lastKnownStatus = objectToSend;
     });
-    res.send("Done");
+    res.json({"status":"working"});
 });
+
+var formatError = function(err){
+    var returnObject = {
+        'error':err
+    };
+    formatIdentity(returnObject);
+    return returnObject;
+}
 
 module.exports = router;
