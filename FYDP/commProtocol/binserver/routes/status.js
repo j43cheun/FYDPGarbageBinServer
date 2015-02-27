@@ -84,11 +84,11 @@ router.post('/updatestatusPost', function(req, res, next) {
         //TODO: CHANGE THIS ACCORDING TO JUSTIN'S FORMAT.
         objectToSend = {
             'location':{
-                'latitude':parseFloat(parmList[0].trim()),
-                'longitude':parseFloat(parmList[1].trim())
+                'latitude':parseFloat(parmList[3].trim()),
+                'longitude':parseFloat(parmList[4].trim())
             },
-            'battery': parseFloat(parmList[2].trim()),
-            'capacity':parseFloat(parmList[3].trim()),
+            'battery': parseFloat("100.0"),
+            'capacity':parseFloat(parmList[2].trim()),
         }
         doPost(formatIdentity(objectToSend));
         lastKnownStatus = objectToSend;
