@@ -13,6 +13,15 @@ var runtimeParms = require('./helpers/runtimeParameters');
 
 var app = express();
 
+/*
+Sample start command:
+node bin/www central_host_name=10.22.0.187 central_port=8080 host_name=10.22.0.186 port=6780
+central_host_name is the ip of the central tomcat server.
+central_port is the port of the tomcat server.
+host_name is the host name of the pi this server is running atop.
+port is the port of the pi this server is running atop.
+*/
+
 app.all('*', function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
