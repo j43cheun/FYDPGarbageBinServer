@@ -6,6 +6,7 @@ import time
 
 def createRandomGarbageData():
     #We need: lattitude, longitude, battery and capacity.
+    temperature = random.uniform(-20,40)
     latitude = random.uniform(-90,90)
     longitude = random.uniform(-180,180)
     battery = random.uniform(0,100)
@@ -17,7 +18,7 @@ def createRandomGarbageData():
     
     #Not sure of Justin's format, but for the time being, this should
     #suffice.
-    print("%s,%s,%s,%s" % (latitude, longitude, battery, capacity))
+    print("%s,%s,%s,%s,%s" % (temperature, battery, capacity, latitude, longitude))
 
 def doFileWork():
     fileName = "dummyFile.txt"

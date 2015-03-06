@@ -87,8 +87,9 @@ router.post('/updatestatusPost', function(req, res, next) {
                 'latitude':parseFloat(parmList[3].trim()),
                 'longitude':parseFloat(parmList[4].trim())
             },
-            'battery': parseFloat("100.0"),
+            'battery': parseFloat("99.9"),
             'capacity':parseFloat(parmList[2].trim()),
+            'timestamp':new Date()
         }
         doPost(formatIdentity(objectToSend));
         lastKnownStatus = objectToSend;
