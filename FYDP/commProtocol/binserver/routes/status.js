@@ -81,6 +81,9 @@ router.post('/updatestatusPost', function(req, res, next) {
         }
         console.log(stdout);
         parmList = stdout.trim().split(',');
+        var centimeters = parseFloat(parmList[1].trim());
+        var size = 32.0;
+        var capacity = (centimeters / size ) * 100;
         //TODO: CHANGE THIS ACCORDING TO JUSTIN'S FORMAT.
         objectToSend = {
             'location':{
@@ -90,7 +93,7 @@ router.post('/updatestatusPost', function(req, res, next) {
                 //'longitude':parseFloat(parmList[4].trim())
             },
             'battery': parseFloat("99.9"),
-            'capacity':parseFloat(parmList[2].trim()),
+            'capacity':capacity,
             'timestamp':new Date()
         }
         doPost(formatIdentity(objectToSend));
