@@ -70,7 +70,7 @@ router.get('/laststatus', function(req, res, next) {
  */
 router.post('/updatestatusPost', function(req, res, next) {
     //This is an async out of process call.
-    external('python testCommandLine.py 1', function(err, stdout, stderr){
+    external('sudo ./uart3', function(err, stdout, stderr){
         //This function should take in what stdout prints out and
         //format it into a valid JavaScript object that can be POSTED
         //to the central system.
