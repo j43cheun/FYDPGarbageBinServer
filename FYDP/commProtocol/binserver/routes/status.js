@@ -91,7 +91,8 @@ router.post('/updatestatusPost', function(req, res, next) {
             },
             'battery': parseFloat("99.9"),
             'current_depth':parseFloat(parmList[1].trim()),
-            'max_depth':31.999, //Volume in centimeters.
+            'max_depth':31.999,// in centimeters.
+            'volume':10.01, // in litres.
             'timestamp':new Date()
         }
         doPost(formatIdentity(objectToSend));
