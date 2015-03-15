@@ -70,7 +70,7 @@ router.get('/laststatus', function(req, res, next) {
  */
 router.post('/updatestatusPost', function(req, res, next) {
     //This is an async out of process call.
-    external('sudo ./uart3', function(err, stdout, stderr){
+    external('dir runTestPost.py', function(err, stdout, stderr){
         //This function should take in what stdout prints out and
         //format it into a valid JavaScript object that can be POSTED
         //to the central system.
@@ -90,7 +90,7 @@ router.post('/updatestatusPost', function(req, res, next) {
                 //'longitude':parseFloat(parmList[4].trim())
             },
             'battery': parseFloat("99.9"),
-            'current_depth':parseFloat(parmList[1].trim()),
+            'current_depth':11.2//parseFloat(parmList[1].trim()),
             'max_depth':31.999,// in centimeters.
             'volume':10.01, // in litres.
             'timestamp':new Date()
