@@ -82,10 +82,18 @@ router.post('/updatestatusPost', function(req, res, next) {
         console.log(stdout);
         parmList = stdout.trim().split(',');
         //TODO: CHANGE THIS ACCORDING TO JUSTIN'S FORMAT.
+		
+		var latitudeMin = 43467000;
+		var longitudeMin = -80538000;
+		var latitudeMax = 43470500;
+		var longitudeMax = -80539000;
+		
+		Random random = new Random();
+		
         objectToSend = {
             'location':{
-                'latitude':79.87,
-                'longitude':65.78
+                'latitude':(random.next(latitudeMax - latitudeMin) + latitudeMin)/1000000.0,
+                'longitude':(random.next(longitudeMax - longitudeMin) + longitudeMin)/1000000.0
                 //'latitude':parseFloat(parmList[3].trim()),
                 //'longitude':parseFloat(parmList[4].trim())
             },
