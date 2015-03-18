@@ -96,7 +96,7 @@ router.post('/updatestatusPost', function(req, res, next) {
                 //'longitude':parseFloat(parmList[4].trim())
             },
             'battery': parseFloat("99.9"),
-            'current_depth':11.2//parseFloat(parmList[1].trim()),
+            'current_depth':11.2,//parseFloat(parmList[1].trim()),
             'max_depth':31.999,// in centimeters.
             'volume':10.01, // in litres.
             'timestamp':new Date()
