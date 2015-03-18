@@ -91,7 +91,7 @@ router.post('/updatestatusPost', function(req, res, next) {
         objectToSend = {
             'location':{
                 'latitude':(Math.random() * (latitudeMax - latitudeMin) + latitudeMin)/1000000.0,
-                'longitude':(Math.random() * (longitudeMax - longitudeMin) + longitudeMin)/1000000.0
+                'longitude':(Math.random() * (longitudeMax - longitudeMin) + longitudeMin)/1000000.0,
                 //'latitude':parseFloat(parmList[3].trim()),
                 //'longitude':parseFloat(parmList[4].trim())
             },
