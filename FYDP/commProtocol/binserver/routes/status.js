@@ -88,12 +88,10 @@ router.post('/updatestatusPost', function(req, res, next) {
 		var latitudeMax = 43470500;
 		var longitudeMax = -80539000;
 		
-		Random random = new Random();
-		
         objectToSend = {
             'location':{
-                'latitude':(random.next(latitudeMax - latitudeMin) + latitudeMin)/1000000.0,
-                'longitude':(random.next(longitudeMax - longitudeMin) + longitudeMin)/1000000.0
+                'latitude':(Math.random() * (latitudeMax - latitudeMin) + latitudeMin)/1000000.0,
+                'longitude':(Math.random() * (longitudeMax - longitudeMin) + longitudeMin)/1000000.0
                 //'latitude':parseFloat(parmList[3].trim()),
                 //'longitude':parseFloat(parmList[4].trim())
             },
