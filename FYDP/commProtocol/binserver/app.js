@@ -84,6 +84,7 @@ runtimeParms.set(serverParms);
 //We register with the server...
 var register = require('./routes/register');
 register.doRegistration(serverParms);
+console.log(serverParms);
 
 app.listen(serverParms.PORT, serverParms.HOST_NAME);
 

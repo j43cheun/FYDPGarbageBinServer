@@ -73,6 +73,7 @@ var parse = function(){
         };
         var key = valueArgumentPair[0].toUpperCase();
         Parameters[key] = castValueIfNeeded(key,valueArgumentPair[1]);
+        console.log(Parameters[key]);
     });
     return Parameters;
 };
