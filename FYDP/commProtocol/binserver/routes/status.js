@@ -39,8 +39,8 @@ var formatIdentity = function(dataToSend) {
     dataToSend.port = ourParameters.PORT;
 
     if(!volume){
-        volume = (Math.round(Math.random() * (maxSize - minSize)) + minSize);
-        max_depth = (Math.round(Math.random() * (maxVolume - minVolume)) + minVolume);
+        volume = (Math.round(Math.random() * (maxVolume - minVolume)) + minVolume);
+        max_depth = (Math.round(Math.random() * (maxSize- minSize)) + minSize);
     }
     
     dataToSend.volume = volume;
