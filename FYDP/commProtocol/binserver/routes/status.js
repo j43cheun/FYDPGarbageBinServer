@@ -22,6 +22,14 @@ var lastKnownStatus = {
     'timestamp' : new Date()
 };
 
+var minSize = 20.1;
+var maxSize = 95.1;
+var minVolume = 8.1;
+var maxVolume = 15.1;
+
+var volume = undefined;
+var max_depth = undefined;
+
 // This helper function adds the static part to the JSON being sent
 // that is to say the binID, the ip and the port.
 var formatIdentity = function(dataToSend) {
@@ -29,6 +37,16 @@ var formatIdentity = function(dataToSend) {
     dataToSend.binID = ourParameters.BIN_ID;
     dataToSend.ip = ourParameters.HOST_NAME;
     dataToSend.port = ourParameters.PORT;
+
+    if(!volume){
+        volume = (Math.round(Math.random() * (maxSize - minSize)) + minSize);
+        max_depth = (Math.round(Math.random() * (maxVolume - minVolume)) + minVolume);
+    }
+    
+    dataToSend.volume = volume;
+    dataToSend.max_depth = max_depth;
+    
+    console.log(dataToSend);
     return dataToSend;
 };
 
@@ -70,7 +88,7 @@ router.get('/laststatus', function(req, res, next) {
  */
 router.post('/updatestatusPost', function(req, res, next) {
     //This is an async out of process call.
-    external('dir runTestPost.py', function(err, stdout, stderr){
+    external('dir', function(err, stdout, stderr){
         //This function should take in what stdout prints out and
         //format it into a valid JavaScript object that can be POSTED
         //to the central system.
@@ -97,8 +115,8 @@ router.post('/updatestatusPost', function(req, res, next) {
             },
             'battery': parseFloat("99.9"),
             'current_depth':11.2,//parseFloat(parmList[1].trim()),
-            'max_depth':31.999,// in centimeters.
-            'volume':10.01, // in litres.
+            //'max_depth':31.999,// in centimeters.
+            //'volume':10.01, // in litres.
             'timestamp':new Date()
         }
         doPost(formatIdentity(objectToSend));

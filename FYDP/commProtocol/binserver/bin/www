@@ -8,11 +8,18 @@ var app = require('../app');
 var debug = require('debug')('binserver:server');
 var http = require('http');
 
+var parser = require('../helpers/serverCommandLineParser');
+var runtimeParms = require('../helpers/runtimeParameters');
+
+var serverParms = parser.parse();
+runtimeParms.set(serverParms);
+
+
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort('3000');
+var port = normalizePort(runtimeParms.port);
 app.set('port', port);
 
 /**
